@@ -1,3 +1,9 @@
+##
+##  Copyright 2009, Ryan Kelly (ryan@rfk.id.au)
+##  Redistributable under the terms of the BSD license:
+##
+##    http://www.opensource.org/licenses/bsd-license.php
+##
 """
 
   regobj:  Pythonic object-based access to the Windows Registry
@@ -30,7 +36,7 @@ attribute access:
 
 Of course, for keys that don't happen to be named like python identifiers,
 there are also methods that can accomplish the same thing.  To help reduce
-visual clutter, calling a key object also performs attribute lookup.
+visual clutter, calling a key object is a shorthand for attribute lookup:
 
   >>> HKCU.Software.set_subkey("my-funny-key",Key)
   >>> HKCU.Software.get_subkey("my-funny-key").SubKey = Key
@@ -56,7 +62,7 @@ class, with 'name', 'type' and 'data' attributes:
   KeyError: "no such value: 'notavalue'"
  
 Iterating over a key generates all the contained values, followed by
-all the contained subkeys.  There are also methods to seperatley iterate
+all the contained subkeys.  There are also methods to seperately iterate
 over just the values, and just the subkeys:
 
   >>> winK = HKCU.Software.Microsoft.Windows
@@ -71,12 +77,10 @@ over just the values, and just the subkeys:
   ['CurrentVersion', 'Shell', 'ShellNoRoam']
   >>> [v.data for v in winK.values()]
   [42]
-  >>> len(winK), len(winK.subkeys()), len(winK.values())
-  (4, 3, 1)
   >>> del winK["testvalue"]
 
-These iterators also support the __contains__ protocol, so they can be
-used to efficiently test whether a given subkey or value exists:
+These iterators also provide efficient implementations of the __contains__
+and __len__ methods, so they can be used as follows:
 
   >>> "Shell" in HKCU.Software.Microsoft.Windows
   True
@@ -84,10 +88,14 @@ used to efficiently test whether a given subkey or value exists:
   True
   >>> "Shell" in HKCU.Software.Microsoft.Windows.values()
   False
+  >>> len(HKCU.Software.Microsoft.Windows)
+  3
+  >>> len(HKCU.Software.Microsoft.Windows.values())
+  0
 
 Finally, there is powerful support for specifying key and value structures
 at creation time.  The simplest case has already been demonstrated, where
-setting a subkey to the Key class or None will create it without any data:
+setting a subkey to the Key class or to None will create it without any data:
 
   >>> HKCU.Software.MyTests = None
   >>> len(HKCU.Software.MyTests)
@@ -130,9 +138,15 @@ And that's that - enjoy!
 
 """
 
+__ver_major__ = 0
+__ver_minor__ = 1
+__ver_patch__ = 0
+__ver_sub__ = ""
+__version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
+                              __ver_patch__,__ver_sub__)
+
 
 import _winreg
-
 
 # Import type constants into our namespace
 TYPES = {}
