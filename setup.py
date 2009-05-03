@@ -15,17 +15,19 @@ DESCRIPTION = "Pythonic object-based access to the Windows Registry."
 LONG_DESC = regobj.__doc__
 AUTHOR = "Ryan Kelly"
 AUTHOR_EMAIL = "ryan@rfk.id.au"
-LICENSE = "LGPL"
+URL="http://www.rfk.id.au/software/"
+LICENSE = "BSD"
 KEYWORDS = "windows registry"
 
 setup(name=NAME,
       version=VERSION,
       author=AUTHOR,
       author_email=AUTHOR_EMAIL,
+      url=URL,
       description=DESCRIPTION,
-      long_descrition=LONG_DESC,
+      long_description=LONG_DESC,
       license=LICENSE,
       keywords=KEYWORDS,
-      modules=MODULES,
+      py_modules=["regobj"],
      )
 
