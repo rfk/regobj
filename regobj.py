@@ -146,6 +146,9 @@ __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
 
 
+import logging
+logging = logging.getLogger("regobj")
+
 import _winreg
 
 # Import type constants into our namespace
@@ -219,14 +222,15 @@ class Key(object):
             return self.hkey
 
     def _del_hkey(self):
-        try:
-            _winreg.CloseKey(self.__dict__["hkey"])
-        except KeyError:
-            pass
-        try:
-            del self.__dict__["hkey"]
-        except KeyError:
-            pass
+        if self.parent is not None:
+            try:
+                _winreg.CloseKey(self.__dict__["hkey"])
+            except KeyError:
+                pass
+            try:
+                del self.__dict__["hkey"]
+            except KeyError:
+                pass
 
     def get_subkey(self,name):
         """Retreive the subkey with the specified name.
@@ -247,7 +251,7 @@ class Key(object):
         There are several different ways to specify the new contents of
         the named subkey:
 
-          * if 'value'is the Key class, a subclass thereof, or None, then
+          * if 'value' is the Key class, a subclass thereof, or None, then
             the subkey is created but not populated with any data.
           * if 'value' is a key instance,  the data from that key will be
             copied into the new subkey.
