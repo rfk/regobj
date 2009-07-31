@@ -146,9 +146,6 @@ __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
 
 
-import logging
-logging = logging.getLogger("regobj")
-
 import _winreg
 
 # Import type constants into our namespace
