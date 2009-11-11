@@ -14,7 +14,6 @@ try:
     execfile("regobj.py",regobj)
 except ImportError:
     pass
-
 VERSION = regobj["__version__"]
 
 NAME = "regobj"
@@ -23,7 +22,7 @@ LONG_DESC = regobj["__doc__"]
 AUTHOR = "Ryan Kelly"
 AUTHOR_EMAIL = "ryan@rfk.id.au"
 URL="http://www.rfk.id.au/software/"
-LICENSE = "BSD"
+LICENSE = "MIT"
 KEYWORDS = "windows registry"
 
 setup(name=NAME,
