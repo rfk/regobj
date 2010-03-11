@@ -140,7 +140,7 @@ And that's that - enjoy!
 
 __ver_major__ = 0
 __ver_minor__ = 1
-__ver_patch__ = 2
+__ver_patch__ = 3
 __ver_sub__ = ""
 __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
@@ -457,7 +457,7 @@ class Value(object):
        return str(self)
 
     def _default_type(self,data):
-        if isinstance(data,int):
+        if isinstance(data,int) or isinstance(data,long):
             return REG_DWORD
         if data is None:
             return REG_NONE
