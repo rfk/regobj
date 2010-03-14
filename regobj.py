@@ -442,11 +442,26 @@ class Value(object):
     type of the data.
     """
 
+    _DWORD_MAX_SIGNED = (1<<31) - 1
+    _DWORD_MIN_SIGNED  = -1 * (1<<32)
+    _DWORD_MAX_UNSIGNED = (1<<32) - 1
+
     def __init__(self,data=None,name="",type=None):
-        self.name = name
-        self.data = data
         if type is None:
             type = self._default_type(data)
+        #  DWORD values are unsigned, but _winreg treats them as signed.
+        #  We do some conversion on input so that unsigned values are
+        #  accepted, but python will convert them into negative integers.
+        #  when you read it back out :-(
+        if data is not None and type == REG_DWORD:
+            if data < self._DWORD_MIN_SIGNED:
+                raise ValueError("DWORD value too small: %s" % (data,))
+            elif data > self._DWORD_MAX_UNSIGNED:
+                raise ValueError("DWORD value too large: %s" % (data,))
+            elif data > self._DWORD_MAX_SIGNED:
+                data = int(data - self._DWORD_MAX_UNSIGNED - 1)
+        self.name = name
+        self.data = data
         self.type = type
 
     def __str__(self):
