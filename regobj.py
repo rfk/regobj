@@ -1,8 +1,8 @@
 ##
 ##  Copyright 2009, Ryan Kelly (ryan@rfk.id.au)
-##  Redistributable under the terms of the BSD license:
+##  Redistributable under the terms of the MIT license:
 ##
-##    http://www.opensource.org/licenses/bsd-license.php
+##    http://www.opensource.org/licenses/mit-license.php
 ##
 """
 
