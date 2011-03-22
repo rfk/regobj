@@ -146,7 +146,11 @@ __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
 
 
-import _winreg
+try:
+    import _winreg
+except ImportError:
+    # Python 3
+    import winreg as _winreg
 
 # Import type constants into our namespace
 TYPES = {}
@@ -512,6 +516,7 @@ class SubkeyIterator(object):
         else:
             self.index += 1
             return Key(k,self.key)
+    __next__ = next
         
 
 class ValueIterator(object):
@@ -547,6 +552,7 @@ class ValueIterator(object):
         else:
             self.index += 1
             return Value(v[1],v[0],v[2])
+    __next__ = next
 
 
 # Bootstrap by creating constants for the root keys
