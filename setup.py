@@ -21,7 +21,7 @@ DESCRIPTION = "Pythonic object-based access to the Windows Registry."
 LONG_DESC = regobj["__doc__"]
 AUTHOR = "Ryan Kelly"
 AUTHOR_EMAIL = "ryan@rfk.id.au"
-URL="http://www.rfk.id.au/software/"
+URL="https://github.com/rfk/regobj"
 LICENSE = "MIT"
 KEYWORDS = "windows registry"
 
