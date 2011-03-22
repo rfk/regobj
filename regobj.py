@@ -52,8 +52,10 @@ class, with 'name', 'type' and 'data' attributes:
   <regobj Value (iFormat,1,REG_SZ)>
   >>> HKCU.Software.Microsoft.Clock["iFormat"].name
   'iFormat'
-  >>> HKCU.Software.Microsoft.Clock["iFormat"].data
-  u'1'
+  >>> print(HKCU.Software.Microsoft.Clock["iFormat"].data)
+  1
+  >>> print(type(HKCU.Software.Microsoft.Clock["iFormat"].data) is type(b'1'.decode('utf8')))
+  True
   >>> HKCU.Software.Microsoft.Clock["iFormat"].type
   1
   >>> HKCU.Software.Microsoft.Clock["notavalue"]
@@ -130,8 +132,10 @@ Any other value assigned to a subkey will become the default value for
 that key (i.e. the value with name ""):
 
   >>> HKCU.Software.MyTests = "dead parrot"
-  >>> HKCU.Software.MyTests[""].data
-  u'dead parrot'
+  >>> print(HKCU.Software.MyTests[""].data)
+  dead parrot
+  >>> print(type(HKCU.Software.MyTests[""].data) is type(b'dead parrot'.decode('utf8')))
+  True
   >>> del HKCU.Software.MyTests
  
 And that's that - enjoy!
