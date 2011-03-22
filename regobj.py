@@ -282,7 +282,7 @@ class Key(object):
             for k in value.subkeys():
                 subkey.set_subkey(k.name,k)
         elif isinstance(value,dict):
-            for (nm,val) in value.iteritems():
+            for (nm,val) in value.items():
                 if isinstance(val,dict):
                     subkey.set_subkey(nm,val)
                 elif isinstance(val,Key):
