@@ -68,7 +68,7 @@ over just the values, and just the subkeys:
   >>> winK = HKCU.Software.Microsoft.Windows
   >>> winK["testvalue"] = 42
   >>> for obj in winK:
-  ...   print obj
+  ...   print(obj)
   <regobj Value (testvalue,42,REG_DWORD)>
   <regobj Key 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion'>
   <regobj Key 'HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell'>
@@ -145,12 +145,13 @@ __ver_sub__ = ""
 __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
 
+import sys
+PY3 = sys.hexversion > 0x03000000
 
-try:
-    import _winreg
-except ImportError:
-    # Python 3
+if PY3:
     import winreg as _winreg
+else:
+    import _winreg
 
 # Import type constants into our namespace
 TYPES = {}
@@ -476,7 +477,7 @@ class Value(object):
        return str(self)
 
     def _default_type(self,data):
-        if isinstance(data,int) or isinstance(data,long):
+        if isinstance(data,int) or (not PY3 and isinstance(data,long)):
             return REG_DWORD
         if data is None:
             return REG_NONE
