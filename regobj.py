@@ -1,8 +1,8 @@
 ##
 ##  Copyright 2009, Ryan Kelly (ryan@rfk.id.au)
-##  Redistributable under the terms of the BSD license:
+##  Redistributable under the terms of the MIT license:
 ##
-##    http://www.opensource.org/licenses/bsd-license.php
+##    http://www.opensource.org/licenses/mit-license.php
 ##
 """
 
@@ -52,8 +52,10 @@ class, with 'name', 'type' and 'data' attributes:
   <regobj Value (iFormat,1,REG_SZ)>
   >>> HKCU.Software.Microsoft.Clock["iFormat"].name
   'iFormat'
-  >>> HKCU.Software.Microsoft.Clock["iFormat"].data
-  u'1'
+  >>> print(HKCU.Software.Microsoft.Clock["iFormat"].data)
+  1
+  >>> print(type(HKCU.Software.Microsoft.Clock["iFormat"].data) is type(b'1'.decode('utf8')))
+  True
   >>> HKCU.Software.Microsoft.Clock["iFormat"].type
   1
   >>> HKCU.Software.Microsoft.Clock["notavalue"]
@@ -68,7 +70,7 @@ over just the values, and just the subkeys:
   >>> winK = HKCU.Software.Microsoft.Windows
   >>> winK["testvalue"] = 42
   >>> for obj in winK:
-  ...   print obj
+  ...   print(obj)
   <regobj Value (testvalue,42,REG_DWORD)>
   <regobj Key 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion'>
   <regobj Key 'HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell'>
@@ -130,8 +132,10 @@ Any other value assigned to a subkey will become the default value for
 that key (i.e. the value with name ""):
 
   >>> HKCU.Software.MyTests = "dead parrot"
-  >>> HKCU.Software.MyTests[""].data
-  u'dead parrot'
+  >>> print(HKCU.Software.MyTests[""].data)
+  dead parrot
+  >>> print(type(HKCU.Software.MyTests[""].data) is type(b'dead parrot'.decode('utf8')))
+  True
   >>> del HKCU.Software.MyTests
  
 And that's that - enjoy!
@@ -139,14 +143,19 @@ And that's that - enjoy!
 """
 
 __ver_major__ = 0
-__ver_minor__ = 1
-__ver_patch__ = 4
+__ver_minor__ = 2
+__ver_patch__ = 0
 __ver_sub__ = ""
 __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
 
+import sys
+PY3 = sys.hexversion > 0x03000000
 
-import _winreg
+if PY3:
+    import winreg as _winreg
+else:
+    import _winreg
 
 # Import type constants into our namespace
 TYPES = {}
@@ -277,7 +286,7 @@ class Key(object):
             for k in value.subkeys():
                 subkey.set_subkey(k.name,k)
         elif isinstance(value,dict):
-            for (nm,val) in value.iteritems():
+            for (nm,val) in value.items():
                 if isinstance(val,dict):
                     subkey.set_subkey(nm,val)
                 elif isinstance(val,Key):
@@ -472,7 +481,7 @@ class Value(object):
        return str(self)
 
     def _default_type(self,data):
-        if isinstance(data,int) or isinstance(data,long):
+        if isinstance(data,int) or (not PY3 and isinstance(data,long)):
             return REG_DWORD
         if data is None:
             return REG_NONE
@@ -512,6 +521,7 @@ class SubkeyIterator(object):
         else:
             self.index += 1
             return Key(k,self.key)
+    __next__ = next
         
 
 class ValueIterator(object):
@@ -547,6 +557,7 @@ class ValueIterator(object):
         else:
             self.index += 1
             return Value(v[1],v[0],v[2])
+    __next__ = next
 
 
 # Bootstrap by creating constants for the root keys
